@@ -5,33 +5,37 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Box from '@/src/components/reusables/Box';
 import DashBoardScreen from '@/src/screens/Tabs/DashBoardScreen';
 import MapScreen from '@/src/screens/Tabs/MapScreen';
-import ProfileScreen from '@/src/screens/Tabs/ProfileScreen';
 import {useTheme} from '@/src/hooks/useTheme.hook';
 import {scale} from '@/src/constants/scaler.constants';
 import ThemedButton from '../components/reusables/ThemedButton';
 import {useSafeNavigation} from '../hooks/useSafeNavigation';
 import Animated, {useAnimatedStyle, withSpring} from 'react-native-reanimated';
+import ThemedIcon, {ThemedIconProps} from '../components/reusables/ThemedIcon';
+
+type RouteConfigType = {
+  name: string;
+  component: React.ComponentType<any>;
+  icon: string;
+  activeIcon: string;
+  source?: ThemedIconProps['source'];
+};
 
 const MainTab = createBottomTabNavigator();
 
-const routesConfig = [
+const routesConfig: RouteConfigType[] = [
   {
     name: 'DashboardScreen',
     component: DashBoardScreen,
     icon: 'home',
     activeIcon: 'home-sharp',
+    source: 'Ionicons',
   },
   {
     name: 'MapScreen',
     component: MapScreen,
-    icon: 'stats-chart',
-    activeIcon: 'stats-chart-sharp',
-  },
-  {
-    name: 'ProfileScreen',
-    component: ProfileScreen,
-    icon: 'person',
-    activeIcon: 'person-sharp',
+    icon: 'location',
+    activeIcon: 'location-outline',
+    source: 'Ionicons',
   },
 ];
 
@@ -100,7 +104,8 @@ export default function TabStack() {
                     align="center"
                     justify="center">
                     <Animated.View style={animatedStyles}>
-                      <Icon
+                      <ThemedIcon
+                        source={tab.source}
                         name={focused ? tab.activeIcon : tab.icon}
                         size={20}
                         color={focused ? theme.text : theme.background}

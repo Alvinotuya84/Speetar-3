@@ -65,7 +65,7 @@ const MapScreenMapScreen = () => {
   }, []);
   return (
     <>
-      <Page px={20} header={{title: 'Market'}} gap={10}>
+      <Page header={{title: 'Market'}} gap={10}>
         <MapView
           provider={PROVIDER_GOOGLE}
           region={{

@@ -12,7 +12,6 @@ export const NavigationRoutes = {
   },
   HomeTabs: {
     DashboardScreen: 'DashboardScreen',
-    ProfileScreen: 'ProfileScreen',
     MapScreen: 'MapScreen',
   },
 };
