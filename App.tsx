@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler';
-import {store} from '@/src/app/store';
 import SplashScreen from '@/src/components/SplashScreen';
 import Navigation from '@/src/navigation';
 import {
@@ -9,7 +8,6 @@ import {
 } from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
 import {Platform, StatusBar, StyleSheet, Text, View} from 'react-native';
-import {Provider} from 'react-redux';
 import {ToastProvider} from './src/components/toast-manager';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import CodePush from 'react-native-code-push';
@@ -26,23 +24,21 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
-        <GestureHandlerRootView>
-          <ToastProvider>
-            <View style={styles.container}>
-              <Navigation />
+      <GestureHandlerRootView>
+        <ToastProvider>
+          <View style={styles.container}>
+            <Navigation />
 
-              {splashScreenVisible && (
-                <SplashScreen
-                  onAnimationEnd={() => {
-                    setSplashScreenVisible(false);
-                  }}
-                />
-              )}
-            </View>
-          </ToastProvider>
-        </GestureHandlerRootView>
-      </Provider>
+            {splashScreenVisible && (
+              <SplashScreen
+                onAnimationEnd={() => {
+                  setSplashScreenVisible(false);
+                }}
+              />
+            )}
+          </View>
+        </ToastProvider>
+      </GestureHandlerRootView>
     </QueryClientProvider>
   );
 };

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,8 +9,6 @@ import TabStack from './TabStack';
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
-  const dispatch = useDispatch();
-
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>

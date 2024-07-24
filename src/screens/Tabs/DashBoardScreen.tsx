@@ -24,7 +24,6 @@ import Geolocation from '@react-native-community/geolocation';
 import {NearbyRestaurantsResponse} from '@/src/types/locationinfo';
 import Rating from '@/src/components/reusables/Rating';
 import ThemedModal from '@/src/components/reusables/ThemedModal';
-import {useDispatch} from 'react-redux';
 import ThemedActivityIndicator from '@/src/components/reusables/ThemedActivityIndicator';
 import {FlashList} from '@shopify/flash-list';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
@@ -85,10 +84,12 @@ const DashBoardScreen = (props: Props) => {
       } else {
         console.log(handleSearch(), '==================================');
 
-        toast.showToast({
-          type: 'error',
-          title: 'Failed to fetch restaurant details update failed',
-        });
+        if (coordinates?.latitude && coordinates?.longitude) {
+          toast.showToast({
+            type: 'error',
+            title: 'Failed to fetch restaurant details update failed',
+          });
+        }
       }
 
       return response;
