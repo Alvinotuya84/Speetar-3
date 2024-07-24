@@ -83,7 +83,7 @@ const DashBoardScreen = (props: Props) => {
           title: 'Restaurant details updated',
         });
       } else {
-        console.log(response, '================================');
+        console.log(handleSearch(), '==================================');
 
         toast.showToast({
           type: 'error',
@@ -112,8 +112,12 @@ const DashBoardScreen = (props: Props) => {
     );
   };
   useEffect(() => {
-    _onMapReady;
+    _onMapReady();
   }, []);
+  useEffect(() => {
+    console.log(coordinates);
+    return () => {};
+  }, [coordinates?.latitude, coordinates?.longitude]);
 
   return (
     <Box flex={1}>
@@ -196,19 +200,12 @@ const RestaurantItem = ({
             source={{uri: restaurant.icon}}
           />
           <ThemedText>Description: {restaurant.name}</ThemedText>
-          <Box direction="row" gap={10}>
-            <ThemedButton
-              label="Add to Cart"
-              onPress={() => {}}
-              width={sWidth * 0.5}
-              color={theme.danger}
-            />
-            <ThemedButton
-              onPress={() => setAddToCartModal(false)}
-              type="primary-outlined"
-              label="Cancel"
-            />
-          </Box>
+
+          <ThemedButton
+            onPress={() => setAddToCartModal(false)}
+            type="primary-outlined"
+            label="Close"
+          />
         </Box>
       </ThemedModal>
       <Box
