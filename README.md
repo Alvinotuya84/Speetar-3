@@ -1,8 +1,6 @@
 # Amega Mobile
 
-A React Native app that displays user IP and ISP information, showcases a selectable image slider, and provides real-time market data for cryptocurrencies.
-
-https://github.com/Alvinotuya84/Amega/blob/main/assets/screenshot-recordings/Amega.gif
+A React Native app that displays a list of nearby restaurants with their names, addresses, and distances from the user's current location. It integrates the Google Places API to fetch restaurant data and uses the device's Geolocation API for accurate distance calculation. The app also includes an interactive map view for visualizing each restaurant's location
 
 ## Table of Contents
 
@@ -41,13 +39,13 @@ npx react-native run-android
 ## Screenshots
 
 - Home screen
-  ![](/assets/screenshot-recordings/Screenshot_1718774035.png)
+  ![](/assets/screenshot-recordings/Screenshot_1721850870.png)
 
-- Profile screen
-  ![](/assets/screenshot-recordings/Screenshot_1718777543.png)
+- Map screen
+  ![](/assets/screenshot-recordings/Screenshot_1721850848.png)
 
-- Market Details Screen
-  ![](/assets/screenshot-recordings/Screenshot_1718778415.png)
+- Home Dark screen
+  ![](/assets/screenshot-recordings/Screenshot_1721850894.png)
 
-- Market Listing screen
-  ![](/assets/screenshot-recordings/Screenshot_1718774055.png)
+- Map Dark Screen
+  ![](/assets/screenshot-recordings/Screenshot_1721851078.png)

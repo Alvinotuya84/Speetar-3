@@ -27,6 +27,7 @@ import ThemedModal from '@/src/components/reusables/ThemedModal';
 import ThemedActivityIndicator from '@/src/components/reusables/ThemedActivityIndicator';
 import {FlashList} from '@shopify/flash-list';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {calculateDistance} from '@/src/utils/functions';
 
 type Props = {};
 
@@ -197,7 +198,16 @@ const RestaurantItem = ({
 }) => {
   const theme = useTheme();
   const [openAddToCartModal, setAddToCartModal] = useState(false);
-  const {showToast} = useToast();
+  const {coordinates} = useMainStore();
+
+  const distance = coordinates
+    ? calculateDistance(
+        coordinates.lat,
+        coordinates.lat,
+        restaurant.geometry.location.lat,
+        restaurant.geometry.location.lng,
+      )
+    : null;
   return (
     <ThemedButton onPress={() => setAddToCartModal(true)} type="text">
       <ThemedModal
@@ -210,12 +220,18 @@ const RestaurantItem = ({
           color={theme.background}
           pa={20}
           radius={scale(10)}>
-          <ImageWrapper
-            height={scale(150)}
-            width={sWidth - scale(40)}
-            source={{uri: restaurant.icon}}
-          />
-          <ThemedText>Description: {restaurant.name}</ThemedText>
+          <Box alignSelf="center">
+            <ImageWrapper
+              height={scale(150)}
+              width={sWidth * 0.5}
+              source={{uri: restaurant.icon}}
+              borderColor={theme.primary}
+              radius={9}
+              borderWidth={1}
+            />
+          </Box>
+          <ThemedText>Restaurant Name: {restaurant.name}</ThemedText>
+          <ThemedText weight="bold">Location: {restaurant.name}</ThemedText>
 
           <ThemedButton
             onPress={() => setAddToCartModal(false)}
@@ -263,6 +279,11 @@ const RestaurantItem = ({
             <ThemedIcon source="Ionicons" name="location" size={'xs'} />:{' '}
             {restaurant.vicinity}
           </ThemedText>
+          {distance && (
+            <ThemedText size="xs" color={theme.primary}>
+              Distance: {distance} km
+            </ThemedText>
+          )}
         </Box>
       </Box>
     </ThemedButton>
