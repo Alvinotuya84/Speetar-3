@@ -3538,6 +3538,7 @@ __metadata:
     react-native-haptic-feedback: ^2.2.0
     react-native-linear-gradient: ^2.8.3
     react-native-maps: 1.7.1
+    react-native-quick-base64: ^2.1.2
     react-native-reanimated: 3.12.0
     react-native-safe-area-context: ^4.8.2
     react-native-screens: ^3.29.0
@@ -9728,6 +9729,18 @@ __metadata:
     react-native-web:
       optional: true
   checksum: 01f0dbba4c09fc21577ceef364a8121467d0b046df202bc22a8d1151af6ac8d4011e3bc7af18901a3266e506748572bf9ccdc2ac4c7f30bb66bf0f341251c529
+  languageName: node
+  linkType: hard
+
+"react-native-quick-base64@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "react-native-quick-base64@npm:2.1.2"
+  dependencies:
+    base64-js: ^1.5.1
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 46f3b26f48b26978686b0c043336220d681e6a02af5abcf3eb4ab7b9216251d1eb2fac5c559e984d963e93f54bd9f323651daac09762196815558abbd551729b
   languageName: node
   linkType: hard
 

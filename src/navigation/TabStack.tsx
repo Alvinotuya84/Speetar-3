@@ -4,7 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Box from '@/src/components/reusables/Box';
 import DashBoardScreen from '@/src/screens/Tabs/DashBoardScreen';
-import MarketDataScreen from '@/src/screens/Tabs/MarketDataScreen';
+import MapScreen from '@/src/screens/Tabs/MapScreen';
 import ProfileScreen from '@/src/screens/Tabs/ProfileScreen';
 import {useTheme} from '@/src/hooks/useTheme.hook';
 import {scale} from '@/src/constants/scaler.constants';
@@ -22,8 +22,8 @@ const routesConfig = [
     activeIcon: 'home-sharp',
   },
   {
-    name: 'MarketDataScreen',
-    component: MarketDataScreen,
+    name: 'MapScreen',
+    component: MapScreen,
     icon: 'stats-chart',
     activeIcon: 'stats-chart-sharp',
   },

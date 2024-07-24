@@ -1,4 +1,4 @@
-import {View, Text, Alert} from 'react-native';
+import {View, Text, Alert, Dimensions} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Box from '@/src/components/reusables/Box';
 import LinearGradientBox from '@/src/components/reusables/LinearGradientBox';
@@ -27,15 +27,23 @@ import ThemedModal from '@/src/components/reusables/ThemedModal';
 import {useDispatch} from 'react-redux';
 import ThemedActivityIndicator from '@/src/components/reusables/ThemedActivityIndicator';
 import {FlashList} from '@shopify/flash-list';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
 type Props = {};
 
 const DashBoardScreen = (props: Props) => {
   const theme = useTheme();
   const toast = useToast();
-  const [ip, setIp] = React.useState<string>('');
   const navigation = useSafeNavigation();
-  const {theme: userTheme, setTheme} = useMainStore();
+  const [filteredRestaurants, setFilteredRestaurants] = useState<
+    NearbyRestaurantsResponse['results']
+  >([]);
+  const {
+    theme: userTheme,
+    setTheme,
+    setUserRestaurants,
+    setCoordinates: setGlobalCoordinates,
+  } = useMainStore();
   const [coordinates, setCoordinates] = useState<{
     latitude: number;
     longitude: number;
@@ -68,27 +76,32 @@ const DashBoardScreen = (props: Props) => {
       );
 
       if (response.status == 'OK') {
+        setFilteredRestaurants(response.results);
+        setUserRestaurants(response.results);
         toast.showToast({
           type: 'success',
           title: 'Restaurant details updated',
         });
       } else {
+        console.log(response, '================================');
+
         toast.showToast({
           type: 'error',
-          title: 'IP Address not restaurant details update failed',
+          title: 'Failed to fetch restaurant details update failed',
         });
       }
 
       return response;
     },
   });
-  useEffect(() => {
+  const _onMapReady = () => {
     Geolocation.requestAuthorization();
 
     Geolocation.getCurrentPosition(
       position => {
         const {latitude, longitude} = position.coords;
         setCoordinates({latitude, longitude});
+        setGlobalCoordinates({lat: latitude, lng: longitude});
         refetch();
       },
       error => {
@@ -97,6 +110,9 @@ const DashBoardScreen = (props: Props) => {
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
+  };
+  useEffect(() => {
+    _onMapReady;
   }, []);
 
   return (
@@ -177,7 +193,7 @@ const RestaurantItem = ({
           <ImageWrapper
             height={scale(150)}
             width={sWidth - scale(40)}
-            source={{uri: restaurant.icon_mask_base_uri}}
+            source={{uri: restaurant.icon}}
           />
           <ThemedText>Description: {restaurant.name}</ThemedText>
           <Box direction="row" gap={10}>
@@ -206,10 +222,11 @@ const RestaurantItem = ({
         pa={scale(10)}>
         <ImageWrapper
           width={sWidth / 2 - scale(20)}
-          source={{uri: restaurant.icon_mask_base_uri}}
+          source={{uri: restaurant?.photos[0]?.photo_reference}}
           height={scale(150)}
           resizeMode="contain"
         />
+
         <Box
           height={'100%'}
           px={scale(10)}

@@ -1,19 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {create} from 'zustand';
 import {createJSONStorage, persist} from 'zustand/middleware';
-import {IpLocationResponse} from '../types/locationinfo';
+import {NearbyRestaurantsResponse} from '../types/locationinfo';
 import {Source} from 'react-native-fast-image';
 import {ImageSourcePropType} from 'react-native';
 
 type ThemeType = 'light' | 'dark' | 'system';
-interface UserIpDetailsType extends IpLocationResponse {
-  image: Source | ImageSourcePropType;
-}
+
 interface useMainStoreType {
   theme: ThemeType;
   setTheme: (theme: ThemeType) => void;
-  userIpDetails: UserIpDetailsType | null;
-  setUserIpDetails: (details: UserIpDetailsType) => void;
+
+  userRestaurants: NearbyRestaurantsResponse['results'] | null;
+  setUserRestaurants: (details: NearbyRestaurantsResponse['results']) => void;
+  coordinates: {lat: number; lng: number} | null;
+  setCoordinates: (coords: {lat: number; lng: number}) => void;
 }
 
 const useMainStore = create(
@@ -21,8 +22,10 @@ const useMainStore = create(
     (set, get) => ({
       theme: 'system',
       setTheme: theme => set({theme}),
-      userIpDetails: null,
-      setUserIpDetails: details => set({userIpDetails: details}),
+      userRestaurants: null,
+      setUserRestaurants: details => set({userRestaurants: details}),
+      coordinates: null,
+      setCoordinates: coords => set({coordinates: coords}),
     }),
     {
       name: 'settings',
