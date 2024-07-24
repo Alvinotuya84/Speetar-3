@@ -14,7 +14,7 @@ import ThemedButton, {
   ThemedIconButton,
 } from '@/src/components/reusables/ThemedButton';
 import ThemedIcon from '@/src/components/reusables/ThemedIcon';
-import {sWidth} from '@/src/constants/dimensions.constants';
+import {sHeight, sWidth} from '@/src/constants/dimensions.constants';
 import Spacer from '@/src/components/reusables/Spacer';
 import {useToast} from '@/src/components/toast-manager';
 import useMainStore from '@/src/app/store2';
@@ -95,7 +95,21 @@ const DashBoardScreen = (props: Props) => {
     },
   });
   const _onMapReady = () => {
-    Geolocation.requestAuthorization();
+    Geolocation.requestAuthorization(() => {
+      Geolocation.getCurrentPosition(
+        position => {
+          const {latitude, longitude} = position.coords;
+          setCoordinates({latitude, longitude});
+          setGlobalCoordinates({lat: latitude, lng: longitude});
+          refetch();
+        },
+        error => {
+          console.log(error);
+          Alert.alert('Error', 'Failed to get location. Please try again.');
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    });
 
     Geolocation.getCurrentPosition(
       position => {
@@ -164,6 +178,7 @@ const DashBoardScreen = (props: Props) => {
       <Box flex={1} color={theme.background} gap={10} pa={10}>
         {isRestaurantDataLoading && <ThemedActivityIndicator size={'large'} />}
         <FlashList
+          numColumns={2}
           estimatedItemSize={50}
           data={restaurantData?.results}
           renderItem={({item}) => <RestaurantItem restaurant={item} />}
@@ -209,41 +224,43 @@ const RestaurantItem = ({
         </Box>
       </ThemedModal>
       <Box
+        align="center"
         borderWidth={1}
         borderColor={theme.text}
         my={10}
-        direction="row"
-        width={'100%'}
+        height={sHeight * 0.35}
+        width={sWidth * 0.45}
         radius={scale(10)}
         color={theme.background}
         pa={scale(10)}>
         <ImageWrapper
           width={sWidth / 2 - scale(20)}
-          source={{uri: restaurant?.photos[0]?.photo_reference}}
+          source={{
+            uri: 'https://via.placeholder.com/300',
+          }}
           height={scale(150)}
           resizeMode="contain"
         />
 
-        <Box
-          height={'100%'}
-          px={scale(10)}
-          width={sWidth / 2 - scale(20)}
-          justify="space-between">
+        <Box alignSelf="flex-start" px={scale(10)}>
           <ThemedText
             size={'xs'}
+            weight="bold"
+            color={theme.primary}
             textProps={{
               numberOfLines: 2,
               ellipsizeMode: 'middle',
             }}>
-            {restaurant.vicinity}
+            {restaurant.name}
           </ThemedText>
 
           <Rating rating={restaurant.rating} />
-          <ThemedText size="lg" weight="bold" color={theme.primary}>
+          {/* <ThemedText size="lg" weight="bold" color={theme.primary}>
             ${restaurant.price_level}
-          </ThemedText>
-          <ThemedText size="sm" color={theme.primaryGray}>
-            Vicinty: {restaurant.vicinity}
+          </ThemedText> */}
+          <ThemedText size="xs" color={theme.primaryGray}>
+            <ThemedIcon source="Ionicons" name="location" size={'xs'} />:{' '}
+            {restaurant.vicinity}
           </ThemedText>
         </Box>
       </Box>

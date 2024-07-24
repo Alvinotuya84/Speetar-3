@@ -26,11 +26,7 @@ import {sHeight} from '@/src/constants/dimensions.constants';
 import ThemedCard from '@/src/components/reusables/ThemedCard';
 import ThemedIcon from '@/src/components/reusables/ThemedIcon';
 import {cryptoIcons} from '@/assets-info/Icons/new-crypto-icons/crypto_2';
-import {
-  BitStampSocketResponse,
-  EnrichedTicker,
-  Ticker,
-} from '@/src/types/market';
+
 import {handleErrorResponse} from '@/src/utils/error.utils';
 import ThemedText from '@/src/components/reusables/ThemedText';
 
@@ -65,7 +61,7 @@ const MapScreenMapScreen = () => {
   }, []);
   return (
     <>
-      <Page header={{title: 'Market'}} gap={10}>
+      <Page header={{title: 'Restaurant'}} gap={10}>
         <MapView
           provider={PROVIDER_GOOGLE}
           region={{
