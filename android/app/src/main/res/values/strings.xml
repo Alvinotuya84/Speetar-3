@@ -1,0 +1,6 @@
+<resources>
+<string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
+<string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
+<string name="CodePushDeploymentKey" moduleConfig="true" translatable="false">L72QFUK8xn7Hw0Kg85xPhMJtssHo4zNA1t3_R</string>
+    <string name="app_name">Amega</string>
+</resources>
