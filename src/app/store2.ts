@@ -14,6 +14,7 @@ interface useMainStoreType {
   setTheme: (theme: ThemeType) => void;
   accessToken: string;
   setAccessToken: (token: string) => void;
+  logout: () => void;
 
   userRestaurants: NearbyRestaurantsResponse['results'] | null;
   setUserRestaurants: (details: NearbyRestaurantsResponse['results']) => void;
@@ -26,6 +27,9 @@ const useMainStore = create(
     (set, get) => ({
       theme: 'system',
       setTheme: theme => set({theme}),
+      logout: () => {
+        set({accessToken: ''});
+      },
       accessToken: '',
       setAccessToken: token => set({accessToken: token}),
       onboarded: false,

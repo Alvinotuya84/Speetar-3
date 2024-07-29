@@ -1,3 +1,5 @@
+import useMainStore from '../app/store2';
+
 export interface FetchResponseWrapper<T> {}
 export function unwrapErrors(
   errorObject: Record<string, string[]>,
@@ -57,7 +59,7 @@ export async function fetchJson<T>(
     excludeAuthHeader: false,
   },
 ): Promise<T> {
-  const token = null;
+  const token = useMainStore.getState().accessToken;
   const headers_ =
     options.excludeAuthHeader === false
       ? objectToHeaders({

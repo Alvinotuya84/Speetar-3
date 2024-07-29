@@ -1,2 +1,2 @@
 export const BASE_URL =
-  process.env.BASE_URL || 'https://8c47-41-212-52-26.ngrok-free.app';
+  process.env.BASE_URL || 'https://151c-41-80-118-61.ngrok-free.app';

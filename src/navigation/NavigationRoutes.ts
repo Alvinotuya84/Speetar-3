@@ -13,6 +13,7 @@ export const NavigationRoutes = {
   HomeTabs: {
     DashboardScreen: 'DashboardScreen',
     MapScreen: 'MapScreen',
+    ProfileScreen: 'ProfileScreen',
   },
 };
 type AuthStackParamList = {

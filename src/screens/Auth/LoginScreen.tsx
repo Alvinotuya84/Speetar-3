@@ -17,13 +17,14 @@ import {sWidth} from '@/src/constants/dimensions.constants';
 import {useSafeNavigation} from '@/src/hooks/useSafeNavigation';
 import ThemedIcon from '@/src/components/reusables/ThemedIcon';
 import Spacer from '@/src/components/reusables/Spacer';
-import {useMutation} from '@tanstack/react-query';
+import {useMutation, useQuery} from '@tanstack/react-query';
 import useForm from '@/src/hooks/useForm.hook';
 import {z} from 'zod';
 import {fetchJson, postJson} from '@/src/utils/fetch.utils';
 import {BASE_URL} from '@/src/constants/network.constants';
-import {AuthResponse} from '@/src/types/auth';
+import {AuthResponse, UserProfileResponse} from '@/src/types/auth';
 import {useToast} from '@/src/components/toast-manager';
+import useMainStore from '@/src/app/store2';
 
 type Props = {};
 
@@ -31,12 +32,13 @@ const LoginScreen = (props: Props) => {
   const theme = useTheme();
   const {showToast} = useToast();
   const navigation = useSafeNavigation();
+  const {setAccessToken} = useMainStore();
 
   const {validateForm, setFormValue, formState} = useForm([
     {
       name: 'username',
       value: '',
-      schema: z.string().email(),
+      schema: z.string(),
     },
     {
       name: 'password',
@@ -56,6 +58,7 @@ const LoginScreen = (props: Props) => {
           type: 'success',
           title: 'Login successful',
         });
+        setAccessToken(response.access_token);
         navigation.navigate('Home');
       } else {
         showToast({
@@ -65,6 +68,7 @@ const LoginScreen = (props: Props) => {
       }
     },
   });
+
   return (
     <Box px={scale(20)} flex={1}>
       <ImageWrapper
@@ -93,14 +97,14 @@ const LoginScreen = (props: Props) => {
           <AuthStepIndicator currentStep={1} />
         </Box>
 
-        <ThemedEmailInput
+        <ThemedTextInput
           onChangeText={text => {
             setFormValue('username', text);
           }}
           wrapper={{
             width: '100%',
           }}
-          placeholder="Enter your email address"
+          placeholder="Enter your Username"
         />
 
         <Box align="flex-end" width={'100%'}>

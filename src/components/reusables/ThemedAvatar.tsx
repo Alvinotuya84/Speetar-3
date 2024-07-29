@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react';
 import Box, {BoxProps} from './Box';
 import ThemedButton, {ThemedIconButton} from './ThemedButton';
 import ThemedText, {ThemedTextProps} from './ThemedText';
-import {changeCase} from '@src/utils/text.utils';
-import {useTheme, useThemeMode} from '@src/hooks/useTheme.hook';
+
 import FastImage, {FastImageProps} from 'react-native-fast-image';
+import {changeCase} from '@/src/utils/text.utils';
+import {useTheme} from '@/src/hooks/useTheme.hook';
 
 export default function ThemedAvatar({
   size,
@@ -157,8 +158,6 @@ export function ThemedHeartAvatar({
       checkImage();
     }
   }, [url]);
-
-  const themeMode = useThemeMode();
 
   return (
     <Box

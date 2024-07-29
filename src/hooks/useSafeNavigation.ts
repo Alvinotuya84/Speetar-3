@@ -5,7 +5,7 @@ import {
 } from '../navigation/NavigationRoutes';
 type ScreenNames =
   | keyof (typeof NavigationRoutes)['Auth']
-  | keyof (typeof NavigationRoutes)['Home'];
+  | keyof (typeof NavigationRoutes)['HomeTabs'];
 
 export function useSafeNavigation() {
   const navigation = useNavigation<StackNavigationTypes>();

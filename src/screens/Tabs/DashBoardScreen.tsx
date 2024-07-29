@@ -28,6 +28,9 @@ import ThemedActivityIndicator from '@/src/components/reusables/ThemedActivityIn
 import {FlashList} from '@shopify/flash-list';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {calculateDistance} from '@/src/utils/functions';
+import {UserProfileResponse} from '@/src/types/auth';
+import {BASE_URL} from '@/src/constants/network.constants';
+import ThemedAvatar from '@/src/components/reusables/ThemedAvatar';
 
 type Props = {};
 
@@ -35,110 +38,42 @@ const DashBoardScreen = (props: Props) => {
   const theme = useTheme();
   const toast = useToast();
   const navigation = useSafeNavigation();
-  const [filteredRestaurants, setFilteredRestaurants] = useState<
-    NearbyRestaurantsResponse['results']
-  >([]);
-  const {
-    theme: userTheme,
-    setTheme,
-    setUserRestaurants,
-    setCoordinates: setGlobalCoordinates,
-  } = useMainStore();
+  const {showToast} = useToast();
+  const {theme: userTheme, setTheme} = useMainStore();
   const [coordinates, setCoordinates] = useState<{
     latitude: number;
     longitude: number;
   } | null>(null);
 
-  const handleSearch = () => {
-    const location = `location=${coordinates?.latitude},${coordinates?.longitude}`;
-    const radius = '&radius=2000';
-    const type = '&keyword=restaurant';
-    const key = '&key=AIzaSyCHHzlPfuUD6JyzylB84QHbeoe6iVIgrxA';
-    return (
-      'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' +
-      location +
-      radius +
-      type +
-      key
-    );
-  };
-
-  const {
-    data: restaurantData,
-    error,
-    isLoading: isRestaurantDataLoading,
-    refetch,
-  } = useQuery({
-    queryKey: [coordinates?.latitude, coordinates?.longitude],
+  const {data: userProfile} = useQuery({
+    queryKey: ['login'],
     queryFn: async () => {
-      const response = await fetchJson<NearbyRestaurantsResponse>(
-        handleSearch(),
+      const response = await fetchJson<UserProfileResponse>(
+        `${BASE_URL}/users/profile`,
       );
-
-      if (response.status == 'OK') {
-        setFilteredRestaurants(response.results);
-        setUserRestaurants(response.results);
-        toast.showToast({
-          type: 'success',
-          title: 'Restaurant details updated',
-        });
+      if (response.success) {
+        return response;
       } else {
-        console.log(handleSearch(), '==================================');
-
-        if (coordinates?.latitude && coordinates?.longitude) {
-          toast.showToast({
-            type: 'error',
-            title: 'Failed to fetch restaurant details update failed',
-          });
-        }
+        showToast({
+          type: 'error',
+          title: 'Failed to fetch user profile',
+        });
+        return null;
       }
-
-      return response;
     },
   });
-  const _onMapReady = () => {
-    Geolocation.requestAuthorization(() => {
-      Geolocation.getCurrentPosition(
-        position => {
-          const {latitude, longitude} = position.coords;
-          setCoordinates({latitude, longitude});
-          setGlobalCoordinates({lat: latitude, lng: longitude});
-          refetch();
-        },
-        error => {
-          console.log(error);
-          Alert.alert('Error', 'Failed to get location. Please try again.');
-        },
-        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-      );
-    });
-
-    Geolocation.getCurrentPosition(
-      position => {
-        const {latitude, longitude} = position.coords;
-        setCoordinates({latitude, longitude});
-        setGlobalCoordinates({lat: latitude, lng: longitude});
-        refetch();
-      },
-      error => {
-        console.log(error);
-        Alert.alert('Error', 'Failed to get location. Please try again.');
-      },
-      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-    );
-  };
-  useEffect(() => {
-    _onMapReady();
-  }, []);
-  useEffect(() => {
-    console.log(coordinates);
-    return () => {};
-  }, [coordinates?.latitude, coordinates?.longitude]);
 
   return (
     <Box flex={1}>
-      <Box width={'100%'} color={theme.text} px={scale(10)} align="flex-end">
-        <ThemedSwitchButton
+      <Box width={'100%'} py={10} px={scale(10)} align="flex-end">
+        <ThemedAvatar
+          color={theme.primary}
+          onPress={() => navigation.navigate('ProfileScreen')}
+          size={30}
+          url={''}
+          username="Alvin Otuya"
+        />
+        {/* <ThemedSwitchButton
           label={
             userTheme === 'light' || userTheme === 'system'
               ? 'Light Theme'
@@ -152,7 +87,7 @@ const DashBoardScreen = (props: Props) => {
           onValueChange={() => {
             setTheme(userTheme === 'light' ? 'dark' : 'light');
           }}
-        />
+        /> */}
       </Box>
       <LinearGradientBox
         colors={[theme.primary, theme.background]}
@@ -165,28 +100,19 @@ const DashBoardScreen = (props: Props) => {
         <Box direction="row" align="center" justify="space-between">
           <Box alignSelf="flex-end">
             <ThemedText color={theme.background} size={'xxxl'} weight="bold">
-              Get Restaurant
+              Hello {userProfile?.data.username}
             </ThemedText>
           </Box>
 
-          <ImageWrapper
+          {/* <ImageWrapper
             source={require('@/assets/home/amega-home.png')}
             height={scale(100)}
             width={scale(100)}
-          />
+          /> */}
         </Box>
       </LinearGradientBox>
 
-      <Box flex={1} color={theme.background} gap={10} pa={10}>
-        {isRestaurantDataLoading && <ThemedActivityIndicator size={'large'} />}
-        <FlashList
-          numColumns={2}
-          estimatedItemSize={50}
-          data={restaurantData?.results}
-          renderItem={({item}) => <RestaurantItem restaurant={item} />}
-          keyExtractor={item => item.name}
-        />
-      </Box>
+      <Box flex={1} color={theme.background} gap={10} pa={10}></Box>
     </Box>
   );
 };

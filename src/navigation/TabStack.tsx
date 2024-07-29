@@ -11,6 +11,7 @@ import ThemedButton from '../components/reusables/ThemedButton';
 import {useSafeNavigation} from '../hooks/useSafeNavigation';
 import Animated, {useAnimatedStyle, withSpring} from 'react-native-reanimated';
 import ThemedIcon, {ThemedIconProps} from '../components/reusables/ThemedIcon';
+import ProfileScreen from '../screens/Tabs/ProfileScreen';
 
 type RouteConfigType = {
   name: string;
@@ -36,6 +37,13 @@ const routesConfig: RouteConfigType[] = [
     icon: 'location',
     activeIcon: 'location-outline',
     source: 'Ionicons',
+  },
+  {
+    name: 'ProfileScreen',
+    component: ProfileScreen,
+    icon: 'user-circle',
+    activeIcon: 'user-circle-o',
+    source: 'FontAwesome',
   },
 ];
 
