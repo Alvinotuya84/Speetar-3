@@ -17,14 +17,56 @@ import {sWidth} from '@/src/constants/dimensions.constants';
 import {useSafeNavigation} from '@/src/hooks/useSafeNavigation';
 import ThemedIcon from '@/src/components/reusables/ThemedIcon';
 import Spacer from '@/src/components/reusables/Spacer';
+import {useMutation} from '@tanstack/react-query';
+import useForm from '@/src/hooks/useForm.hook';
+import {z} from 'zod';
+import {fetchJson, postJson} from '@/src/utils/fetch.utils';
+import {BASE_URL} from '@/src/constants/network.constants';
+import {AuthResponse} from '@/src/types/auth';
+import {useToast} from '@/src/components/toast-manager';
 
 type Props = {};
 
 const LoginScreen = (props: Props) => {
   const theme = useTheme();
+  const {showToast} = useToast();
   const navigation = useSafeNavigation();
+
+  const {validateForm, setFormValue, formState} = useForm([
+    {
+      name: 'username',
+      value: '',
+      schema: z.string().email(),
+    },
+    {
+      name: 'password',
+      value: '',
+      schema: z.string().min(8),
+    },
+  ]);
+  const loginMutation = useMutation({
+    mutationFn: async () => {
+      const response = await postJson<AuthResponse>(`${BASE_URL}/auth/login`, {
+        username: formState.username,
+        password: formState.password,
+      });
+
+      if (response.success) {
+        showToast({
+          type: 'success',
+          title: 'Login successful',
+        });
+        navigation.navigate('Home');
+      } else {
+        showToast({
+          type: 'error',
+          title: 'Invalid email or password',
+        });
+      }
+    },
+  });
   return (
-    <Page px={scale(20)}>
+    <Box px={scale(20)} flex={1}>
       <ImageWrapper
         source={require('@/assets/logo-light.png')}
         height={100}
@@ -40,15 +82,21 @@ const LoginScreen = (props: Props) => {
           Login here
         </ThemedText>
 
-        <ThemedText>
-          Welcome back stay informed with personalized news tailored just for
-          you
+        <ThemedText
+          style={{
+            textAlign: 'center',
+          }}>
+          Welcome to Amega DailyDone where you get to manage your tasks and
+          resources
         </ThemedText>
         <Box width={'100%'} my={scale(20)}>
           <AuthStepIndicator currentStep={1} />
         </Box>
 
         <ThemedEmailInput
+          onChangeText={text => {
+            setFormValue('username', text);
+          }}
           wrapper={{
             width: '100%',
           }}
@@ -59,6 +107,9 @@ const LoginScreen = (props: Props) => {
           <ThemedPasswordInput
             wrapper={{
               width: '100%',
+            }}
+            onChangeText={text => {
+              setFormValue('password', text);
             }}
           />
           <ThemedButton
@@ -71,20 +122,14 @@ const LoginScreen = (props: Props) => {
           />
         </Box>
 
-        <ThemedButton width={'100%'} label={'Login'} />
-
         <ThemedButton
           width={'100%'}
-          onPress={() => navigation.navigate('LoginScreen')}
-          type="primary-outlined">
-          <Box direction="row" pa={10} align="center">
-            <ThemedIcon source="AntDesign" size={'md'} name="google" />
-            <Spacer width={10} />
-            <ThemedText size={'sm'}>Sign-in using google</ThemedText>
-          </Box>
-        </ThemedButton>
+          loading={loginMutation.isPending}
+          onPress={() => validateForm(() => loginMutation.mutate())}
+          label={'Login'}
+        />
       </Box>
-    </Page>
+    </Box>
   );
 };
 

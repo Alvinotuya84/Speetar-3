@@ -5,18 +5,24 @@ import LoginScreen from '@/src/screens/Auth/LoginScreen';
 import {NavigationRoutes} from './NavigationRoutes';
 import OnboardingScreen from '../screens/Auth/OnboardingScreen';
 import ChooseAuthTypeScreen from '@/src/screens/Auth/ChooseAuthTypeScreen';
-import OTPScreen from '../screens/Auth/OTPScreen';
-import ConnectSocialScreen from '../screens/Auth/ConnectSocialScreen';
 import ForgotPasswordScreen from '../screens/Auth/ForgotPasswordScreen';
+import useMainStore from '../app/store2';
 
 const Stack = createNativeStackNavigator();
 
 const AuthStack = () => {
+  const {onboarded} = useMainStore();
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}>
+      {!onboarded && (
+        <Stack.Screen
+          name={NavigationRoutes.Auth.OnBoardingScreen}
+          component={OnboardingScreen}
+        />
+      )}
       <Stack.Screen
         name={NavigationRoutes.Auth.LoginScreen}
         component={LoginScreen}
@@ -24,22 +30,6 @@ const AuthStack = () => {
       <Stack.Screen
         name={NavigationRoutes.Auth.SignUpScreen}
         component={SignUpScreen}
-      />
-      <Stack.Screen
-        name={NavigationRoutes.Auth.OnBoardingScreen}
-        component={OnboardingScreen}
-      />
-      <Stack.Screen
-        name={NavigationRoutes.Auth.ChooseAuthTypeScreen}
-        component={ChooseAuthTypeScreen}
-      />
-      <Stack.Screen
-        name={NavigationRoutes.Auth.OTPScreen}
-        component={OTPScreen}
-      />
-      <Stack.Screen
-        name={NavigationRoutes.Auth.ConnectSocialScreen}
-        component={ConnectSocialScreen}
       />
       <Stack.Screen
         name={NavigationRoutes.Auth.ForgotPasswordScreen}

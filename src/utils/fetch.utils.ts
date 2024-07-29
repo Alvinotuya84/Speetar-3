@@ -84,7 +84,7 @@ export async function postJson<T>(
   options: FetchWrapperOptions = {
     excludeAuthHeader: false,
   },
-): Promise<FetchResponseWrapper<T>> {
+): Promise<T> {
   const token = null;
   const headers_ =
     options.excludeAuthHeader === false

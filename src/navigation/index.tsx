@@ -5,19 +5,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AuthStack from './AuthStack';
 import TabStack from './TabStack';
+import useMainStore from '../app/store2';
 
 const Stack = createNativeStackNavigator();
-
 const Navigation = () => {
+  const {accessToken} = useMainStore();
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        {/* {null ? (
-          <Stack.Screen name="Onboarding" component={OnboardingStack} />
-        ) : null ? (
-          <Stack.Screen name="App" component={AppStack} />
-        ) : ( */}
-        <Stack.Screen name="Tabs" component={TabStack} />
+        {!accessToken ? (
+          <Stack.Screen name="Onboarding" component={AuthStack} />
+        ) : (
+          <Stack.Screen name="Tabs" component={TabStack} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

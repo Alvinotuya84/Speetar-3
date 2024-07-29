@@ -1,3 +1,4 @@
+import useMainStore from '@/src/app/store2';
 import Box from '@/src/components/reusables/Box';
 import Page from '@/src/components/reusables/Page';
 import ThemedButton, {
@@ -9,7 +10,7 @@ import {useSafeNavigation} from '@/src/hooks/useSafeNavigation';
 import {useTheme} from '@/src/hooks/useTheme.hook';
 import {animateLayout} from '@/src/utils/animation.utils';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ImageSourcePropType, ScrollView} from 'react-native';
 import CountryFlag from 'react-native-country-flag';
 import FastImage, {Source} from 'react-native-fast-image';
@@ -38,8 +39,15 @@ function OnboardingScreen() {
   const theme = useTheme();
   const navigation = useSafeNavigation();
   const insets = useSafeAreaInsets();
+  const {setOnboarded} = useMainStore();
 
   const scrollRef = React.useRef<ScrollView>(null);
+
+  useEffect(() => {
+    return () => {
+      setOnboarded(true);
+    };
+  }, []);
 
   return (
     <>
@@ -54,6 +62,7 @@ function OnboardingScreen() {
                   onPress={() => {
                     scrollRef.current?.scrollToEnd({animated: true});
                     setCurrentSlideIndex(onboardingSlidesData.length + 1);
+                    setOnboarded(true);
                   }}
                   type="text"
                   size="sm"

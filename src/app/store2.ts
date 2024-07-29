@@ -9,7 +9,11 @@ type ThemeType = 'light' | 'dark' | 'system';
 
 interface useMainStoreType {
   theme: ThemeType;
+  onboarded: boolean;
+  setOnboarded: (onboarded: boolean) => void;
   setTheme: (theme: ThemeType) => void;
+  accessToken: string;
+  setAccessToken: (token: string) => void;
 
   userRestaurants: NearbyRestaurantsResponse['results'] | null;
   setUserRestaurants: (details: NearbyRestaurantsResponse['results']) => void;
@@ -22,6 +26,10 @@ const useMainStore = create(
     (set, get) => ({
       theme: 'system',
       setTheme: theme => set({theme}),
+      accessToken: '',
+      setAccessToken: token => set({accessToken: token}),
+      onboarded: false,
+      setOnboarded: onboarded => set({onboarded}),
       userRestaurants: null,
       setUserRestaurants: details => set({userRestaurants: details}),
       coordinates: null,
