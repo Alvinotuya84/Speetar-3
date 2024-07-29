@@ -15,6 +15,7 @@ export const Colors = {
     text: '#000',
     stroke: '#000',
     primaryGray: '#8E8E93',
+    warning: '#F2C773',
 
     background: '#fff',
     danger: '#FF0000',
@@ -25,6 +26,7 @@ export const Colors = {
     border: 'rgb(39, 39, 41)',
     secondary: 'red',
     primaryGray: '#8E8E93',
+    warning: '#F2C773',
 
     surface: '#1C1C1E',
 
