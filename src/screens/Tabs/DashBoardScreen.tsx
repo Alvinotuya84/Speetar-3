@@ -1,49 +1,25 @@
-import {
-  View,
-  Text,
-  Alert,
-  Dimensions,
-  FlatList,
-  ScrollView,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import Box from '@/src/components/reusables/Box';
-import LinearGradientBox from '@/src/components/reusables/LinearGradientBox';
-import {scale} from '@/src/constants/scaler.constants';
-import {useTheme} from '@/src/hooks/useTheme.hook';
-import ThemedText from '@/src/components/reusables/ThemedText';
-import {ThemedSearchInput} from '@/src/components/reusables/ThemedTextInput';
-import ImageWrapper from '@/src/components/reusables/ImageWrapper';
-import ImageSlider from '@/src/components/reusables/ImagesSlider';
-import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
-import {fetchJson} from '@/src/utils/fetch.utils';
-import ThemedButton, {
-  ThemedIconButton,
-} from '@/src/components/reusables/ThemedButton';
-import ThemedIcon from '@/src/components/reusables/ThemedIcon';
-import {sHeight, sWidth} from '@/src/constants/dimensions.constants';
-import Spacer from '@/src/components/reusables/Spacer';
-import {useToast} from '@/src/components/toast-manager';
 import useMainStore from '@/src/app/store2';
+import Box from '@/src/components/reusables/Box';
+import ThemedButton from '@/src/components/reusables/ThemedButton';
+import ThemedIcon from '@/src/components/reusables/ThemedIcon';
+import ThemedText from '@/src/components/reusables/ThemedText';
+import {useToast} from '@/src/components/toast-manager';
+import {scale} from '@/src/constants/scaler.constants';
 import {useSafeNavigation} from '@/src/hooks/useSafeNavigation';
-import ThemedSwitchButton from '@/src/components/reusables/ThemedSwitchButton';
-import Geolocation from '@react-native-community/geolocation';
-import {NearbyRestaurantsResponse} from '@/src/types/locationinfo';
-import Rating from '@/src/components/reusables/Rating';
-import ThemedModal from '@/src/components/reusables/ThemedModal';
-import ThemedActivityIndicator from '@/src/components/reusables/ThemedActivityIndicator';
-import {FlashList} from '@shopify/flash-list';
-import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import {calculateDistance, formatDate} from '@/src/utils/functions';
-import {UserProfileResponse} from '@/src/types/auth';
-import {BASE_URL} from '@/src/constants/network.constants';
-import ThemedAvatar from '@/src/components/reusables/ThemedAvatar';
-import {animateLayout} from '@/src/utils/animation.utils';
-import {Todo, TodoResponse} from '@/src/types/todo';
-import moment from 'moment';
-import Page from '@/src/components/reusables/Page';
-import ThemedCard from '@/src/components/reusables/ThemedCard';
+import {useTheme} from '@/src/hooks/useTheme.hook';
+import {fetchJson} from '@/src/utils/fetch.utils';
+import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
+import React, {useState} from 'react';
+import {FlatList} from 'react-native';
+
 import Task from '@/src/components/reusables/Task';
+import ThemedActivityIndicator from '@/src/components/reusables/ThemedActivityIndicator';
+import ThemedAvatar from '@/src/components/reusables/ThemedAvatar';
+import {BASE_URL} from '@/src/constants/network.constants';
+import {UserProfileResponse} from '@/src/types/auth';
+import {Todo, TodoResponse} from '@/src/types/todo';
+import {animateLayout} from '@/src/utils/animation.utils';
+import moment from 'moment';
 
 type Props = {};
 
@@ -105,7 +81,7 @@ const DashBoardScreen = (props: Props) => {
     queryKey: ['recent-tasks'],
     queryFn: async () => {
       const response = await fetchJson<TodoResponse>(
-        `${BASE_URL}/todos/?page=1&limit=3`,
+        `${BASE_URL}/todos/?page=1&limit=2`,
       );
       return response;
     },

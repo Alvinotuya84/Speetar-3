@@ -1,9 +1,7 @@
 import useMainStore from '@/src/app/store2';
 import Box from '@/src/components/reusables/Box';
 import Page from '@/src/components/reusables/Page';
-import ThemedButton, {
-  ThemedIconButton,
-} from '@/src/components/reusables/ThemedButton';
+import ThemedButton from '@/src/components/reusables/ThemedButton';
 import ThemedText from '@/src/components/reusables/ThemedText';
 import {sHeight, sWidth} from '@/src/constants/dimensions.constants';
 import {useSafeNavigation} from '@/src/hooks/useSafeNavigation';
@@ -11,26 +9,25 @@ import {useTheme} from '@/src/hooks/useTheme.hook';
 import {animateLayout} from '@/src/utils/animation.utils';
 
 import React, {useEffect, useState} from 'react';
-import {ImageSourcePropType, ScrollView} from 'react-native';
-import CountryFlag from 'react-native-country-flag';
+import {ScrollView} from 'react-native';
 import FastImage, {Source} from 'react-native-fast-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const onboardingSlidesData = [
   {
-    title: 'Expand Your Circle by connecting  with people around the world',
+    title: 'Get to create your own tasks',
     img: require('@/assets/onboarding/news_one.png'),
-    desc: 'Get instant notifications for breaking news and updates.',
+    desc: 'Task creation with ease',
   },
   {
-    title: 'Chat with strangers and make the your partner',
+    title: 'Manage your tasks by your self',
     img: require('@/assets/onboarding/news_two.png'),
-    desc: 'Save articles and read offline at your convenience.',
+    desc: 'At your own convenience',
   },
   {
-    title: 'Embark on a Personalized Journey to Discover Your Ideal Connection',
+    title: 'Time is money',
     img: require('@/assets/onboarding/news_three.png'),
-    desc: 'Take the first step on your journey to better your life. Get started today!',
+    desc: 'Utilize your time with ease',
   },
 ];
 
@@ -139,9 +136,9 @@ function OnboardingScreen() {
             })}
           </Box>
           <ThemedButton
-            onPress={() => navigation.navigate('ChooseAuthTypeScreen')}
+            onPress={() => navigation.navigate('LoginScreen')}
             icon={{
-              name: "'arrow-forward-circle'",
+              name: 'arrow-forward-circle',
               source: 'Ionicons',
               size: 'lg',
             }}

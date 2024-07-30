@@ -1,9 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {create} from 'zustand';
 import {createJSONStorage, persist} from 'zustand/middleware';
-import {NearbyRestaurantsResponse} from '../types/locationinfo';
-import {Source} from 'react-native-fast-image';
-import {ImageSourcePropType} from 'react-native';
 
 type ThemeType = 'light' | 'dark' | 'system';
 
@@ -15,11 +12,6 @@ interface useMainStoreType {
   accessToken: string;
   setAccessToken: (token: string) => void;
   logout: () => void;
-
-  userRestaurants: NearbyRestaurantsResponse['results'] | null;
-  setUserRestaurants: (details: NearbyRestaurantsResponse['results']) => void;
-  coordinates: {lat: number; lng: number} | null;
-  setCoordinates: (coords: {lat: number; lng: number}) => void;
 }
 
 const useMainStore = create(
@@ -35,9 +27,6 @@ const useMainStore = create(
       onboarded: false,
       setOnboarded: onboarded => set({onboarded}),
       userRestaurants: null,
-      setUserRestaurants: details => set({userRestaurants: details}),
-      coordinates: null,
-      setCoordinates: coords => set({coordinates: coords}),
     }),
     {
       name: 'settings',
