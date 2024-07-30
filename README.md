@@ -1,6 +1,6 @@
 # Amega Mobile
 
-A React Native app that displays a list of nearby restaurants with their names, addresses, and distances from the user's current location. It integrates the Google Places API to fetch restaurant data and uses the device's Geolocation API for accurate distance calculation. The app also includes an interactive map view for visualizing each restaurant's location
+A cross-platform to-do application built with React Native and NestJS. This app allows users to manage tasks with simple session-based authorization. The backend is connected to a MySQL database, and the app supports Android, iOS, and web platforms. The app is built using TypeScript for both the frontend and backend.
 
 ## Table of Contents
 
@@ -39,13 +39,20 @@ npx react-native run-android
 ## Screenshots
 
 - Home screen
-  ![](/assets/screenshot-recordings/Screenshot_1721850870.png)
+  ![](/assets/screenshot-recordings/Screenshot_1722302600.png)
 
-- Map screen
-  ![](/assets/screenshot-recordings/Screenshot_1721850848.png)
+- Tasks screen
+  ![](/assets/screenshot-recordings/Screenshot_1722301651.png)
 
-- Home Dark screen
-  ![](/assets/screenshot-recordings/Screenshot_1721850894.png)
+- More Screens
+  ![](/assets/screenshot-recordings/Screenshot_1722301564.png)
 
-- Map Dark Screen
-  ![](/assets/screenshot-recordings/Screenshot_1721851078.png)
+  ![](/assets/screenshot-recordings/Screenshot_1722302621.png)
+
+  ![](/assets/screenshot-recordings/Screenshot_1722302611.png)
+
+  ![](/assets/screenshot-recordings/Screenshot_1722302621.png)
+
+  ![](/assets/screenshot-recordings/Screenshot_1722302627.png)
+
+  ![](/assets/screenshot-recordings/Screenshot_1722302633.png)
