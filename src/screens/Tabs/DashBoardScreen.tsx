@@ -132,7 +132,7 @@ const DashBoardScreen = (props: Props) => {
         <ThemedAvatar
           color={theme.primary}
           onPress={() => navigation.navigate('ProfileScreen')}
-          size={30}
+          size={scale(40)}
           url={''}
           username={userProfile?.data.username ?? 'N'}
         />
@@ -198,6 +198,12 @@ const DashBoardScreen = (props: Props) => {
       </Box>
 
       <ThemedText weight="bold">Progress</ThemedText>
+
+      {todos.length == 0 && (
+        <ThemedText size={'xxl'} weight="bold" color={theme.primary}>
+          You have no Tasks created.
+        </ThemedText>
+      )}
 
       {status == 'pending' ? (
         <ThemedActivityIndicator size={'large'} />

@@ -81,7 +81,11 @@ export default function ThemedAvatar({
           onPress={() => {
             onPress ? onPress() : () => {};
           }}>
-          <ThemedText fontWeight="bold" size={size / 2} {...textProps}>
+          <ThemedText
+            weight="bold"
+            size={size / 2}
+            {...textProps}
+            color={theme.background}>
             {changeCase(username.split(' ')[0][0], 'upper')}
             {username.split(' ')[1]?.[0] || providedAbriv || ''}
           </ThemedText>
