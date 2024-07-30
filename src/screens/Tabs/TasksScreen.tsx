@@ -207,7 +207,13 @@ const TasksScreen = () => {
             />
           ))}
         </Box>
+        {todos.length == 0 && (
+          <ThemedText size={'xxl'} weight="bold" color={theme.primary}>
+            You have no Tasks created.
+          </ThemedText>
+        )}
       </Box>
+
       <FlatList
         showsVerticalScrollIndicator={false}
         data={todos}
