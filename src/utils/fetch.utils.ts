@@ -188,6 +188,44 @@ export async function fetchJsonWithParams<T>(
   }
 }
 
+export async function patchJson<T>(
+  url: string,
+  dataObject: Record<string, any>,
+  options: FetchWrapperOptions = {
+    excludeAuthHeader: false,
+  },
+): Promise<T> {
+  const token = useMainStore.getState().accessToken;
+  const headers_ =
+    options.excludeAuthHeader === false
+      ? objectToHeaders({
+          Authorization: `Bearer ${token}`,
+          'content-type': 'application/json',
+        })
+      : new Headers({
+          'content-type': 'application/json',
+        });
+
+  const body = JSON.stringify(dataObject);
+
+  try {
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: headers_,
+      body,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
+  }
+}
+
 interface FetchWrapperOptions {
   excludeAuthHeader: boolean;
 }

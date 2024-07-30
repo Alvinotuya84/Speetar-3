@@ -70,7 +70,7 @@ const LoginScreen = (props: Props) => {
   });
 
   return (
-    <Box px={scale(20)} flex={1}>
+    <Box px={scale(20)} flex={1} color={theme.background}>
       <ImageWrapper
         source={require('@/assets/logo-light.png')}
         height={100}

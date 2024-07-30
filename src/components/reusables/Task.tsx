@@ -41,8 +41,15 @@ const Task = (props: Todo) => {
         </ThemedText>
       </Box>
       <ThemedButton
+        size="xxs"
+        disabled={props.completed}
+        onPress={() => {
+          props.onPress?.();
+        }}
         icon={{
-          name: 'dots-three-vertical',
+          name: props.completed ? 'check' : 'dots-three-vertical',
+          size: 'lg',
+          color: props.completed ? theme.success : theme.warning,
           source: 'Entypo',
         }}
         type="text"

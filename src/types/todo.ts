@@ -5,6 +5,7 @@ export type Todo = {
   completed: false;
   createdAt: string;
   updatedAt: string;
+  onPress?: () => void;
 };
 export interface TodoResponse {
   data: Todo[];
@@ -29,5 +30,17 @@ export interface CreateToDoResponse {
     createdAt: string;
     updatedAt: string;
   };
+  success: boolean;
+}
+export interface EditTaskResponse {
+  data: {
+    id: number;
+    title: string;
+    description: string;
+    completed: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  message: string;
   success: boolean;
 }

@@ -38,17 +38,25 @@ import moment from 'moment';
 import {scale} from '@/src/constants/scaler.constants';
 import useForm from '@/src/hooks/useForm.hook';
 import {z} from 'zod';
-import {fetchJson, postJson} from '@/src/utils/fetch.utils';
+import {fetchJson, patchJson, postJson} from '@/src/utils/fetch.utils';
 import {BASE_URL} from '@/src/constants/network.constants';
-import {CreateToDoResponse, TodoResponse} from '@/src/types/todo';
+import {
+  CreateToDoResponse,
+  EditTaskResponse,
+  TodoResponse,
+} from '@/src/types/todo';
 import Task from '@/src/components/reusables/Task';
 import {useToast} from '@/src/components/toast-manager';
+import ThemedCheckBox from '@/src/components/reusables/ThemedCheckBox';
 
 const TasksScreen = () => {
   const {} = useMainStore();
   const theme = useTheme();
   const [openAddEditModal, setOpenAddEditModal] = useState(false);
   const [selectedFilterDate, setSelectedFilterDate] = useState('');
+  const [selectedTask, setSelectedTask] = useState<
+    TodoResponse['data'][0] | null
+  >(null);
   const [editMode, setEditModa] = useState(false);
   const {showToast} = useToast();
   const addTaskMutation = useMutation({
@@ -58,6 +66,7 @@ const TasksScreen = () => {
         {
           title: formState.title,
           description: formState.description,
+          completed: formState.completed,
         },
       );
       if (response.success) {
@@ -67,6 +76,34 @@ const TasksScreen = () => {
         });
         setOpenAddEditModal(false);
         resetForm();
+        refetch();
+      } else {
+        showToast({
+          type: 'error',
+          title: 'Failed to add task',
+        });
+        handleErrorResponse(response);
+      }
+    },
+  });
+  const updateTaskMutation = useMutation({
+    mutationFn: async () => {
+      const response = await patchJson<CreateToDoResponse>(
+        `${BASE_URL}/todos/${selectedTask?.id}`,
+        {
+          title: formState.title,
+          description: formState.description,
+          completed: formState.completed,
+        },
+      );
+      if (response.success) {
+        showToast({
+          type: 'success',
+          title: 'Task Updated successfully',
+        });
+        setOpenAddEditModal(false);
+        resetForm();
+        refetch();
       } else {
         showToast({
           type: 'error',
@@ -88,6 +125,11 @@ const TasksScreen = () => {
       value: '',
       schema: z.string().min(0),
     },
+    {
+      name: 'completed',
+      value: false,
+      schema: z.boolean(),
+    },
   ]);
 
   const fetchTodos = async ({pageParam = 1}) => {
@@ -106,18 +148,25 @@ const TasksScreen = () => {
       throw error;
     }
   };
-  const {data, error, fetchNextPage, hasNextPage, isFetchingNextPage, status} =
-    useInfiniteQuery({
-      initialPageParam: 1,
-      queryKey: ['tasks'],
-      queryFn: fetchTodos,
-      getNextPageParam: (lastPage, pages) => {
-        if (lastPage.pagination.currentPage >= lastPage.pagination.totalPages) {
-          return undefined;
-        }
-        return lastPage.pagination.currentPage + 1;
-      },
-    });
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+    refetch,
+  } = useInfiniteQuery({
+    initialPageParam: 1,
+    queryKey: ['tasks'],
+    queryFn: fetchTodos,
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage.pagination.currentPage >= lastPage.pagination.totalPages) {
+        return undefined;
+      }
+      return lastPage.pagination.currentPage + 1;
+    },
+  });
 
   const todos = data?.pages.flatMap(page => page.data) || [];
 
@@ -136,7 +185,11 @@ const TasksScreen = () => {
           </ThemedText>
           <ThemedButton
             label={'+ Add Task'}
-            onPress={() => setOpenAddEditModal(true)}
+            onPress={() => {
+              setOpenAddEditModal(true);
+              setEditModa(false);
+              resetForm();
+            }}
             size="xxs"
           />
         </Box>
@@ -158,7 +211,19 @@ const TasksScreen = () => {
       <FlatList
         showsVerticalScrollIndicator={false}
         data={todos}
-        renderItem={({item}) => <Task {...item} />}
+        renderItem={({item}) => (
+          <Task
+            {...item}
+            onPress={() => {
+              setEditModa(true);
+              setOpenAddEditModal(true);
+              setSelectedTask(item);
+              setFormValue('title', item.title);
+              setFormValue('description', item.description);
+              setFormValue('completed', item.completed);
+            }}
+          />
+        )}
         keyExtractor={item => item.id.toString()}
         onEndReached={() => {
           if (hasNextPage && !isFetchingNextPage) {
@@ -191,11 +256,17 @@ const TasksScreen = () => {
           value={formState.description}
           onChangeText={text => setFormValue('description', text)}
         />
+        <ThemedCheckBox
+          checked={formState.completed}
+          label="Completed?"
+          onPress={() => setFormValue('completed', !formState.completed)}
+        />
         <ThemedButton
           label={editMode ? 'Edit Task' : 'Create Task'}
-          loading={addTaskMutation.isPending}
+          loading={addTaskMutation.isPending || updateTaskMutation.isPending}
           onPress={() => {
             if (editMode) {
+              validateForm(() => updateTaskMutation.mutate());
             } else {
               validateForm(() => addTaskMutation.mutate());
             }

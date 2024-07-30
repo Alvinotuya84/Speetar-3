@@ -1,6 +1,6 @@
 import {View, Text} from 'react-native';
 import React from 'react';
-import Page from '@/src/components/reusables/Page';
+import Page, {BackButton} from '@/src/components/reusables/Page';
 import ImageWrapper from '@/src/components/reusables/ImageWrapper';
 import Box from '@/src/components/reusables/Box';
 import ThemedText from '@/src/components/reusables/ThemedText';
@@ -29,6 +29,7 @@ import {
 } from '@/src/types/auth';
 import {useToast} from '@/src/components/toast-manager';
 import useMainStore from '@/src/app/store2';
+import useKeyboardVisibility from '@/src/hooks/useKeyboardVisiblity.hook';
 
 type Props = {};
 
@@ -37,6 +38,7 @@ const SignUpScreen = (props: Props) => {
   const {showToast} = useToast();
   const navigation = useSafeNavigation();
   const {setAccessToken} = useMainStore();
+  const keyboardVisibility = useKeyboardVisibility();
 
   const {validateForm, setFormValue, formState} = useForm([
     {
@@ -76,72 +78,76 @@ const SignUpScreen = (props: Props) => {
   });
 
   return (
-    <Page px={scale(20)}>
-      <Box flex={1}>
-        <ImageWrapper
-          source={require('@/assets/logo-light.png')}
-          height={100}
-          width={100}
-          resizeMode="contain"
-        />
-        <Box flex={1} justify="space-evenly" align="center">
-          <ThemedText
-            weight="bold"
-            color={theme.primary}
-            fontWeight="bold"
-            size={'xxl'}>
-            SignUp here
-          </ThemedText>
-
-          <ThemedText
-            style={{
-              textAlign: 'center',
-            }}>
-            Welcome to Amega DailyDone where you get to manage your tasks and
-            resources
-          </ThemedText>
-          <Box width={'100%'} my={scale(20)}>
-            <AuthStepIndicator currentStep={1} />
+    <Box flex={1} pa={scale(20)}>
+      <Box direction="row">
+        <BackButton />
+      </Box>
+      <ImageWrapper
+        source={require('@/assets/logo-light.png')}
+        height={100}
+        width={100}
+        resizeMode="contain"
+      />
+      <Box flex={1} justify="space-evenly" align="center">
+        {keyboardVisibility ? null : (
+          <Box align="center">
+            <ThemedText
+              weight="bold"
+              color={theme.primary}
+              fontWeight="bold"
+              size={'xxl'}>
+              SignUp here
+            </ThemedText>
+            <ThemedText
+              style={{
+                textAlign: 'center',
+              }}>
+              Welcome to Amega DailyDone where you get to manage your tasks and
+              resources
+            </ThemedText>
           </Box>
+        )}
+        <Box width={'100%'} my={scale(20)}>
+          <AuthStepIndicator currentStep={1} />
+        </Box>
 
-          <ThemedTextInput
-            onChangeText={text => {
-              setFormValue('username', text);
-            }}
+        <ThemedTextInput
+          onChangeText={text => {
+            setFormValue('username', text);
+          }}
+          wrapper={{
+            width: '100%',
+          }}
+          placeholder="Enter your Username"
+        />
+
+        <Box align="flex-end" width={'100%'}>
+          <ThemedPasswordInput
             wrapper={{
               width: '100%',
             }}
-            placeholder="Enter your Username"
+            onChangeText={text => {
+              setFormValue('password', text);
+            }}
           />
-
-          <Box align="flex-end" width={'100%'}>
-            <ThemedPasswordInput
-              wrapper={{
-                width: '100%',
-              }}
-              onChangeText={text => {
-                setFormValue('password', text);
-              }}
-            />
-            <ThemedButton
-              type="text"
-              label={'Already have an account? Sign In'}
-              labelProps={{
-                color: theme.primary,
-              }}
-              onPress={() => navigation.navigate('SignUpScreen')}
-            />
-          </Box>
-
           <ThemedButton
-            width={'100%'}
-            loading={SignUpMutation.isPending}
-            onPress={() => validateForm(() => SignUpMutation.mutate())}
-            label={'Sign Up'}
+            type="text"
+            label={'Already have an account? Sign In'}
+            labelProps={{
+              color: theme.primary,
+            }}
+            onPress={() => navigation.navigate('SignUpScreen')}
           />
         </Box>
+
+        <ThemedButton
+          width={'100%'}
+          loading={SignUpMutation.isPending}
+          onPress={() => validateForm(() => SignUpMutation.mutate())}
+          label={'Sign Up'}
+        />
       </Box>
-    </Page>
+    </Box>
   );
 };
 

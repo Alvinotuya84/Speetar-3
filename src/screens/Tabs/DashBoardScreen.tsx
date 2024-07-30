@@ -134,7 +134,7 @@ const DashBoardScreen = (props: Props) => {
           onPress={() => navigation.navigate('ProfileScreen')}
           size={30}
           url={''}
-          username="Alvin Otuya"
+          username={userProfile?.data.username ?? 'N'}
         />
         {/* <ThemedSwitchButton
           label={
