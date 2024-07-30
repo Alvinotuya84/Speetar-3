@@ -4,7 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Box from '@/src/components/reusables/Box';
 import DashBoardScreen from '@/src/screens/Tabs/DashBoardScreen';
-import MapScreen from '@/src/screens/Tabs/MapScreen';
+import TasksScreen from '@/src/screens/Tabs/TasksScreen';
 import {useTheme} from '@/src/hooks/useTheme.hook';
 import {scale} from '@/src/constants/scaler.constants';
 import ThemedButton from '../components/reusables/ThemedButton';
@@ -32,10 +32,10 @@ const routesConfig: RouteConfigType[] = [
     source: 'Ionicons',
   },
   {
-    name: 'MapScreen',
-    component: MapScreen,
-    icon: 'location',
-    activeIcon: 'location-outline',
+    name: 'TasksScreen',
+    component: TasksScreen,
+    icon: 'calendar',
+    activeIcon: 'calendar-outline',
     source: 'Ionicons',
   },
   {

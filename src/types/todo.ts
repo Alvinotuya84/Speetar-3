@@ -15,3 +15,19 @@ export interface TodoResponse {
     pageSize: number;
   };
 }
+
+export interface CreateToDoResponse {
+  data: {
+    title: string;
+    description: string;
+    completed: false;
+    user: {
+      id: 1;
+      username: string;
+    };
+    id: 7;
+    createdAt: string;
+    updatedAt: string;
+  };
+  success: boolean;
+}

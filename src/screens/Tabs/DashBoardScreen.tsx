@@ -43,6 +43,7 @@ import {Todo, TodoResponse} from '@/src/types/todo';
 import moment from 'moment';
 import Page from '@/src/components/reusables/Page';
 import ThemedCard from '@/src/components/reusables/ThemedCard';
+import Task from '@/src/components/reusables/Task';
 
 type Props = {};
 
@@ -57,7 +58,7 @@ const DashBoardScreen = (props: Props) => {
   const fetchTodos = async ({pageParam = 1}) => {
     try {
       const response = await fetchJson<TodoResponse>(
-        `${BASE_URL}/todos?page=${pageParam}&limit=10`,
+        `${BASE_URL}/todos?page=${pageParam}&limit=4`,
       );
 
       // Check if the response is valid
@@ -198,20 +199,25 @@ const DashBoardScreen = (props: Props) => {
 
       <ThemedText weight="bold">Progress</ThemedText>
 
-      <FlatList
-        data={todos}
-        renderItem={({item}) => <Task {...item} />}
-        keyExtractor={item => item.id.toString()}
-        onEndReached={() => {
-          if (hasNextPage && !isFetchingNextPage) {
-            fetchNextPage();
+      {status == 'pending' ? (
+        <ThemedActivityIndicator size={'large'} />
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={todos}
+          renderItem={({item}) => <Task {...item} />}
+          keyExtractor={item => item.id.toString()}
+          onEndReached={() => {
+            if (hasNextPage && !isFetchingNextPage) {
+              fetchNextPage();
+            }
+          }}
+          onEndReachedThreshold={0.5} // Adjust as needed
+          ListFooterComponent={() =>
+            isFetchingNextPage ? <ThemedActivityIndicator size="large" /> : null
           }
-        }}
-        onEndReachedThreshold={0.5} // Adjust as needed
-        ListFooterComponent={() =>
-          isFetchingNextPage ? <ThemedActivityIndicator size="large" /> : null
-        }
-      />
+        />
+      )}
       {/* <ImageWrapper
             source={require('@/assets/home/amega-home.png')}
             height={scale(100)}
@@ -252,36 +258,5 @@ const RecentTask = (props: Todo) => {
         name={props.completed ? 'checkcircle' : 'exclamationcircleo'}
       />
     </Box>
-  );
-};
-
-const Task = (props: Todo) => {
-  const theme = useTheme();
-  return (
-    <ThemedCard
-      pa={20}
-      height={50}
-      my={10}
-      mx={scale(10)}
-      direction="row"
-      justify="space-between"
-      radius={scale(5)}
-      color={theme.primary}>
-      <Box direction="row" justify="flex-end">
-        <ThemedText size="xxs" color={theme.background}>
-          {moment(props.createdAt).fromNow()}
-        </ThemedText>
-      </Box>
-
-      <ThemedText size="md" color={theme.background}>
-        {props.title}
-      </ThemedText>
-
-      <ThemedIcon
-        source="AntDesign"
-        color={props.completed ? theme.success : theme.warning}
-        name={props.completed ? 'checkcircle' : 'exclamationcircleo'}
-      />
-    </ThemedCard>
   );
 };

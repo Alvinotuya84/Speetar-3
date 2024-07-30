@@ -87,7 +87,7 @@ export async function postJson<T>(
     excludeAuthHeader: false,
   },
 ): Promise<T> {
-  const token = null;
+  const token = useMainStore.getState().accessToken;
   const headers_ =
     options.excludeAuthHeader === false
       ? objectToHeaders({

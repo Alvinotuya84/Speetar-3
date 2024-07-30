@@ -36,7 +36,7 @@ export function BackButton() {
           {platform === 'ios' ? (
             <ThemedIcon name="chevron-left" size={'xxl'} />
           ) : (
-            <ThemedIcon name="arrow-left" size={'xl'} />
+            <ThemedIcon name="arrow-left-l" size={'xl'} source="Fontisto" />
           )}
         </ThemedButton>
       )}

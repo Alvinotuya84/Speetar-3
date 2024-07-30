@@ -9,3 +9,12 @@ export interface UserProfileResponse {
   };
   success: true;
 }
+export interface RegisterResponse {
+  data: {
+    username: string;
+    password: string;
+    id: number;
+  };
+  success: true;
+  message?: string;
+}

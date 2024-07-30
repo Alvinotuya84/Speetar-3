@@ -12,7 +12,7 @@ export const NavigationRoutes = {
   },
   HomeTabs: {
     DashboardScreen: 'DashboardScreen',
-    MapScreen: 'MapScreen',
+    TasksScreen: 'TasksScreen',
     ProfileScreen: 'ProfileScreen',
   },
 };

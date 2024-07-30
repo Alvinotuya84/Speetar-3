@@ -118,11 +118,11 @@ const LoginScreen = (props: Props) => {
           />
           <ThemedButton
             type="text"
-            label={'Forgot Password?'}
+            label={"Don't have an account? Sign up"}
             labelProps={{
               color: theme.primary,
             }}
-            onPress={() => navigation.navigate('ForgotPasswordScreen')}
+            onPress={() => navigation.navigate('SignUpScreen')}
           />
         </Box>
 
